@@ -19,6 +19,7 @@ public class AlgoController {
             return String.format("Encountered error: %s", e.getMessage());
         }
         return String.format("Proceeded algorithm in aprox. %d seconds", time);
+
     }
 
 }
