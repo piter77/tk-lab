@@ -17,50 +17,41 @@
                     events : {
                         load : function() {
                             setInterval(function() {
-                                var firstSeries = chart.series[0];
-                                var secondSeries = chart.series[1];
-                                var categories = chart.xAxis[0].categories;
-                                var categoriesLength = categories.length;
-                                var yAxisValue;
-
                                 RealTimeDataResource.getData().then(function(response) {
                                     var data = response.data;
-                                    yAxisValue = data.yAxis;
 
-                                    firstSeries.addPoint([categoriesLength, yAxisValue], false, true);
-                                    secondSeries.addPoint([categoriesLength, yAxisValue + 10], false, true);
+                                    for(var key in data){
+                                        var series = chart.series.find(x => x.name === key)
+                                        if(typeof series === 'undefined' ){
+                                            series = chart.addSeries({ name : key });
+                                        }
 
-                                    var dateNow = new Date(data.xAxis);
-
-                                    categories.push(dateNow.getHours() + ':'
-                                        + (dateNow.getMinutes() <= 9 ? '0' +dateNow.getMinutes() : dateNow.getMinutes())
-                                        + ':' +dateNow.getSeconds());
-                                    chart.xAxis[0].setCategories(categories, false);
+                                        var points = data[key];
+                                        series.points = [];
+                                        for(var i=0; i<points.length; i++){
+                                            series.addPoint([points[i].xAxis, points[i].yAxis], false);
+                                        };
+                                    }
 
                                     chart.redraw();
                                 });
 
-                            }, 1000);
+                            }, 5000);
                         }
                     }
                 },
                 title: {
-                    text : 'Real Time Data'
+                    text : 'Best fitness:'
                 },
                 xAxis: {
-                    categories: ['00:00:00', '00:00:00', '00:00:00', '00:00:00', '00:00:00',
-                        '00:00:00', '00:00:00', '00:00:00', '00:00:00', '00:00:00'],
+                    categories: [],
                 },
                 yAxis : {
                     title : {
                         text : 'Data',
                     },
                 },
-                series: [{
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                }, {
-                    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                }]
+                series: []
             })
         }
 
