@@ -16,7 +16,7 @@
                     renderTo : 'realTimeDataBarChart',
                     events : {
                         load : function() {
-                            setInterval(function() {
+                            setInterval(function updateChart() {
                                 RealTimeDataResource.getData().then(function(response) {
                                     var data = response.data;
 
@@ -35,8 +35,9 @@
 
                                     chart.redraw();
                                 });
-
-                            }, 5000);
+                                
+                                return updateChart;
+                            }(), 5000);
                         }
                     }
                 },
