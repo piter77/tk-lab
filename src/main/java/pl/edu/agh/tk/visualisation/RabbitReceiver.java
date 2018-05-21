@@ -11,22 +11,14 @@ public class RabbitReceiver {
     @Autowired
     private RealTimeDataResource realTimeDataResource;
 
-    @RabbitListener(queues = "#{queue1.name}")
-    public void receive1(String msg) throws Exception {
-        System.out.println(" [1] Received " + msg);
+    @RabbitListener(queues = "#{queue.name}")
+    public void receive(String msg) throws Exception {
+        System.out.println(" [x] Received " + msg);
 
-        ChartDataDTO data = mapper.readValue(msg, ChartDataDTO.class);
+        AlgoMessageDTO messageObject = mapper.readValue(msg, AlgoMessageDTO.class);
 
-        realTimeDataResource.addBestFitnessData("TestIsland_1", data);
-    }
-
-
-    @RabbitListener(queues = "#{queue2.name}")
-    public void receive2(String msg) throws Exception {
-        System.out.println(" [2] Received " + msg);
-
-        ChartDataDTO data = mapper.readValue(msg, ChartDataDTO.class);
-
-        realTimeDataResource.addBestFitnessData("TestIsland_2", data);
+        realTimeDataResource.addBestFitnessData(
+                messageObject.getComputationId(),
+                messageObject);
     }
 }

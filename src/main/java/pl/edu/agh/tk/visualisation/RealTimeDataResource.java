@@ -23,9 +23,13 @@ public class RealTimeDataResource {
         bestFitness = new HashMap<>();
     }
 
-    public void addBestFitnessData(String islandName, ChartDataDTO chartPoint) {
+    public void addBestFitnessData(String islandName, AlgoMessageDTO messageObject) {
+        // new computation island
         if (!bestFitness.containsKey(islandName))
             bestFitness.put(islandName, new ArrayList<>());
+
+        // add data to existing island values
+        ChartDataDTO chartPoint = new ChartDataDTO(messageObject.getIterationNumber(), messageObject.getComputationBestFitness());
         bestFitness.get(islandName).add(chartPoint);
     }
 
