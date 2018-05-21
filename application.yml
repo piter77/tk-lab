@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: sender,receiver
+
+logging:
+  level:
+    org: ERROR
+
